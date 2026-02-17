@@ -4,14 +4,22 @@ from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-from constants import groq_key
+# from constants import groq_key
 import os
 
 # page configuration
 st.set_page_config(page_title="PDF QA App")
 st.title("📄 Chat with your PDF (RAG)")
 
+# os.environ["GROQ_API_KEY"] = groq_key
+groq_key = os.getenv("GROQ_API_KEY")
+
+if not groq_key:
+    st.error("GROQ_API_KEY not found. Add it in Streamlit Secrets.")
+    st.stop()
+
 os.environ["GROQ_API_KEY"] = groq_key
+
 
 ## upoad pdf file
 uploaded_file = st.file_uploader("Upload a PDF", type="pdf")
